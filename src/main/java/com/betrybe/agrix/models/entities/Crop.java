@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 
 /**
  * The type Crop.
@@ -24,6 +25,12 @@ public class Crop {
   @Column(name = "planted_area")
   private Double plantedArea;
 
+  @Column(name = "planted_date")
+  private LocalDate plantedDate;
+
+  @Column(name = "harvest_date")
+  private LocalDate harvestDate;
+
   @ManyToOne
   @JoinColumn(name = "farm_id")
   private Farm farm;
@@ -31,7 +38,8 @@ public class Crop {
   /**
    * Empty constructor.
    */
-  public Crop() {}
+  public Crop() {
+  }
 
   /**
    * Constructor crop.
@@ -42,42 +50,66 @@ public class Crop {
    * @param farm farm crop
    */
 
-  public Crop(Long id, String name, Double plantedArea, Farm farm) {
+  public Crop(
+      Long id,
+      String name,
+      Double plantedArea,
+      LocalDate plantedDate,
+      LocalDate harvestDate,
+      Farm farm) {
     this.id = id;
     this.name = name;
     this.plantedArea = plantedArea;
+    this.plantedDate = plantedDate;
+    this.harvestDate = harvestDate;
     this.farm = farm;
-  }
-
-  public void setPlantedArea(Double plantedArea) {
-    this.plantedArea = plantedArea;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public Long getId() {
     return id;
   }
 
-  public void setFarm(Farm farm) {
-    this.farm = farm;
+  public void setHarvestDate(LocalDate harvestDate) {
+    this.harvestDate = harvestDate;
   }
 
-  public String getName() {
-    return name;
+  public LocalDate getHarvestDate() {
+    return harvestDate;
   }
 
-  public Farm getFarm() {
-    return farm;
+  public Double getPlantedArea() {
+    return plantedArea;
+  }
+
+  public void setPlantedArea(Double plantedArea) {
+    this.plantedArea = plantedArea;
   }
 
   public void setName(String name) {
     this.name = name;
   }
 
-  public Double getPlantedArea() {
-    return plantedArea;
+  public Farm getFarm() {
+    return farm;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setFarm(Farm farm) {
+    this.farm = farm;
+  }
+
+  public LocalDate getPlantedDate() {
+    return plantedDate;
+  }
+
+  public void setPlantedDate(LocalDate plantedDate) {
+    this.plantedDate = plantedDate;
   }
 }

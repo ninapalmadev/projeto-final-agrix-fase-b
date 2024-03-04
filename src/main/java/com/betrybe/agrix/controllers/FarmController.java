@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FarmController {
   private final FarmService farmService;
 
-  /**
+  /**getCropById
    * Instantiates a new Farm controller.
    *
    * @param farmService the farm service
@@ -93,6 +93,8 @@ public class FarmController {
         newCrop.getId(),
         newCrop.getName(),
         newCrop.getPlantedArea(),
+        newCrop.getPlantedDate(),
+        newCrop.getHarvestDate(),
         newCrop.getFarm().getId()));
   }
 
@@ -100,22 +102,23 @@ public class FarmController {
    * GET all crops Method.
    *
    * @param farmId farm id
-   * @return list of cropsexi
+   * @return list of cropsid
    */
   @GetMapping(value = "/{farmId}/crops")
-  public List<CropDto> getAllCrops(@PathVariable Long farmId) {
+  public List<CropDto> getAllCropsByFarmId(@PathVariable Long farmId) {
     Optional<Farm> optionalFarm = farmService.getFarmById(farmId);
 
     if (optionalFarm.isEmpty()) {
       throw new NotFoundException("Fazenda não encontrada!");
     }
     List<Crop> crops = farmService.getAllCrops(farmId).get();
-
     return crops.stream()
         .map(crop -> new CropDto(
             crop.getId(),
             crop.getName(),
             crop.getPlantedArea(),
+            crop.getPlantedDate(),
+            crop.getHarvestDate(),
             crop.getFarm().getId()))
         .collect(Collectors.toList());
   }

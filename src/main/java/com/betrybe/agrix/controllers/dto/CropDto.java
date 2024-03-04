@@ -12,9 +12,8 @@ public record CropDto(
     Double plantedArea,
     LocalDate plantedDate,
     LocalDate harvestDate,
-    Long farmId
-) {
+    Long farmId) {
   public Crop toCrop() {
-    return new Crop(id, name, plantedArea, plantedDate, harvestDate, null);
+    return new Crop(id, name, plantedArea, plantedDate, harvestDate, null, null);
   }
 }

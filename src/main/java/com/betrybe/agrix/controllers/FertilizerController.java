@@ -61,6 +61,12 @@ public class FertilizerController {
         .collect(Collectors.toList());
   }
 
+  /**
+   * GET fertililzerId METHOD.
+   *
+   * @param fertilizerId fertilizer id
+   * @return individual fertilizer
+   */
   @GetMapping("/{fertilizerId}")
   public ResponseEntity<Fertilizer> getFertilizerById(@PathVariable Long fertilizerId) {
     Optional<Fertilizer> optionalFertilizer = fertilizerService.getFertilizerById(fertilizerId);

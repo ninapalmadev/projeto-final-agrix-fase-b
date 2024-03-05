@@ -3,7 +3,9 @@ package com.betrybe.agrix.controllers;
 import com.betrybe.agrix.controllers.dto.CropDto;
 import com.betrybe.agrix.controllers.exceptions.NotFoundException;
 import com.betrybe.agrix.models.entities.Crop;
+import com.betrybe.agrix.models.entities.Fertilizer;
 import com.betrybe.agrix.service.CropService;
+import com.betrybe.agrix.service.FertilizerService;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,10 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/crops")
 public class CropController {
   private final CropService cropService;
+  private final FertilizerService fertilizerService;
 
   @Autowired
-  public CropController(CropService cropService) {
+  public CropController(CropService cropService, FertilizerService fertilizerService) {
     this.cropService = cropService;
+    this.fertilizerService = fertilizerService;
   }
   /**
    * GET crop METHOD.
@@ -68,5 +73,31 @@ public class CropController {
         crop.getPlantedDate(),
         crop.getHarvestDate(),
         crop.getFarm().getId()));
+  }
+
+  /**
+   * POST fertilizer id METHOD.
+   *
+   * @param cropId crop id
+   * @param fertilizerId fertilizer id
+   * @return crop and fertilizer
+   */
+  @PostMapping("/{cropId}/fertilizers/{fertilizerId}")
+  public ResponseEntity<String> searchCropAndFertilizer(@PathVariable Long cropId,
+      @PathVariable Long fertilizerId) {
+    Optional<Crop> optionalCrop = cropService.getCropById(cropId);
+    if (optionalCrop.isEmpty()) {
+      throw new NotFoundException("Plantação não encontrada!");
+    }
+
+    Optional<Fertilizer> optionalFertilizer = fertilizerService.getFertilizerById(fertilizerId);
+    if (optionalFertilizer.isEmpty()) {
+      throw new NotFoundException("Fertilizante não encontrado!");
+    }
+    Crop crop = optionalCrop.get();
+    Fertilizer fertilizer = optionalFertilizer.get();
+    cropService.searchCropAndFertilizer(crop.getId(), fertilizer.getId());
+    return ResponseEntity.status(HttpStatus.CREATED).body(
+        "Fertilizante e plantação associados com sucesso!");
   }
 }

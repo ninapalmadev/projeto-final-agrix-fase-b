@@ -82,7 +82,7 @@ public class CropController {
    * @param fertilizerId fertilizer id
    * @return crop and fertilizer
    */
-  @PostMapping("/{cropId}/fertilizers/{fertilizerId}")
+  @PostMapping(value = "/{cropId}/fertilizers/{fertilizerId}")
   public ResponseEntity<String> searchCropAndFertilizer(@PathVariable Long cropId,
       @PathVariable Long fertilizerId) {
     Optional<Crop> optionalCrop = cropService.getCropById(cropId);
@@ -99,5 +99,21 @@ public class CropController {
     cropService.searchCropAndFertilizer(crop.getId(), fertilizer.getId());
     return ResponseEntity.status(HttpStatus.CREATED).body(
         "Fertilizante e plantação associados com sucesso!");
+  }
+
+  /**
+   * GET fertilizers METHOD.
+   *
+   * @param cropId crop id
+   * @return fertilizers by crop
+   */
+  @GetMapping(value = "{cropId}/fertilizers")
+  public List<Fertilizer> getFertilizers(@PathVariable Long cropId) {
+    Optional<Crop> optionalCrop = cropService.getCropById(cropId);
+    if (optionalCrop.isEmpty()) {
+      throw new NotFoundException("Plantação não encontrada!");
+    }
+    Crop crop = optionalCrop.get();
+    return crop.getFertilizers();
   }
 }
